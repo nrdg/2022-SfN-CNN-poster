@@ -1,1 +1,10 @@
 .DS_Store
+.refresh
+poster.aux
+poster.bbl
+poster.blg
+poster.fdb_latexmk
+poster.fls
+poster.log
+poster.out
+poster.pdf
