@@ -99,7 +99,8 @@
 
 \begin{itemize}[nosep, leftmargin=*]
     \item Tractometry uses diffusion MRI (dMRI) to quantify brain tissue properties within white matter connections \emph{in vivo} \cite{yeatman2012}.
-    \item The Healthy Brain Network Processed Open Derivatives is a large (n>2,000) datset of dMRI that has been processed and automatically QC'd\cite{RichieHalfordCieslak2022HBNPOD2, alexander2017hbn}.
+    \item The Healthy Brain Network Processed Open Derivatives (HBN POD2) is a
+    large (n>2,000) pediatric dMRI dataset that has been processed and automatically QC'd\cite{RichieHalfordCieslak2022HBNPOD2, alexander2017hbn}.
     \item The pyAFQ software was used to create tract profiles for statistical analysis \cite{Kruper2021evaluating}.
     \item In previous work, we demonstrated that regularized regression provides accurate predictions of individual age in HBN from tractometry data (WM-based ``brain age'')\cite{richford2021sgl}.
 \end{itemize}
@@ -118,108 +119,44 @@
 
 \begin{minipage}[b]{1\linewidth}
     \large
-    \begin{minipage}[b]{0.33\linewidth}
+    \begin{minipage}[b]{0.35\linewidth}
     \textbf{A}\\
     \includegraphics[height=4.5cm]{figures/linear-model.pdf}
     \end{minipage}
-    \hspace{0.25cm}
-    \begin{minipage}[b]{0.33\linewidth}
+    \hspace{0.5cm}
+    \begin{minipage}[b]{0.35\linewidth}
     \textbf{B}\\
     \includegraphics[height=4.5cm]{figures/linear-to-convnet.pdf}
     \end{minipage}
-    \begin{minipage}[b]{0.33\linewidth}
+    \begin{minipage}[b]{0.2\linewidth}
     \textbf{C}\\
     \includegraphics[height=4.5cm]{figures/convnet-schematic.pdf}
     \end{minipage}
  \end{minipage}
 
 In a linear tractometry model, $\textbf{y} = \beta X$ (\textbf{A}), to move towards a convolutional neural networks, we stack the data from different tracts and metrics (FA, MD, MK) as different measurement ``channels'' (\textbf{B}). Training samples are then passed to a network (\textbf{C}).
-}
 
-%----------------------------------------------------------------------------
-%	CONCLUSION
-%----------------------------------------------------------------------------
+We used the 1817 subjects from HBN POD2 that had passing QC scores and age
+information.
 
-\headerbox{Conclusion and future work}{name=conclusion, column=0, below=methods}{
+To evaluate the models, we set aside a test set of 20\% of the subjects (363 subjects)
 
-\begin{itemize}[nosep, leftmargin=*]
-    \item We present a large preprocessed dMRI dataset for the study of pediatric
-    mental health and structural brain connectivity.
-
-    \begin{itemize}[nosep, leftmargin=*]
-        \item 2,136 subjects, aged 5-21
-        \item preprocessed DWI
-        \item including QC ratings created from a combination of expert ratings and citizen scientists
-        \item openly available on FCP-INDI
-    \end{itemize}
-
-    \item HBN-POD2 is amenable to different dMRI analysis, including tractometry, graph theoretical analysis, and combinations with fMRI.
-
-    \item Future work:
-    \begin{itemize}[nosep, leftmargin=*]
-        \item HBN-POD2 will grow as HBN reaches its 10,000 participant goal.
-        \item Develop a deep learning model for QC of future releases
-        without the need for citizen science ratings.
-    \end{itemize}
-\end{itemize}
-
+To compare model dependence on training set size, we set aside a test set (20\% or ) and then trained with variable train set sizes (100, 175, 350, 700, 1000, 1453 subjects)
 }
 
 %----------------------------------------------------------------------------
 %	RESULTS 1
 %----------------------------------------------------------------------------
 
-\headerbox{Results Control}{name=qc, column=1, span=2, row=0}{
-
-\begin{itemize}[noitemsep, leftmargin=*]
-    \item Six dMRI experts rated 200 participants’ processed data on a 1-5 scale using the dmriprep-viewer interface \url{https://www.nipreps.org/dmriprep-viewer})
-    \item We found excellent inter-rater reliability: ICC3k=0.93 (95\% CI: [0.91, 0.94]) Ratings are available in \url{https://github.com/richford/hbn-pod2-expert-qc}.
-    \item We call this subset the ``gold standard'' QC dataset.
-    \item But the size of HBN-POD2 makes expert QC on the full dataset prohibitive, we estimate QC of the full dataset would take each FTE expert rater ~200 hours.
-\end{itemize}
-
-\vspace{0.5em}
-\noindent\textbf{%
-    \underline{Challenge}: %
-    Generate QC labels for a large dMRI dataset when expert ratings are prohibitively time consuming.%
-}
-\vspace{0.5em}
-
-\begin{itemize}[noitemsep, leftmargin=*]
-    \item Based on the SwipesForScience framework
-    (https://swipesforscience.org/; \cite{keshavan2019citizen}), we created a
-    citizen science web-app that presents static/dynamic views of b=0 maps and
-    directionally-encoded FA maps for a binary (pass/fail) decision for 1,653
-    HBN subjects.
-    \item 374 citizen scientists provided $587,778$ ratings (of these, 133
-    citizen scientists provided $>3,000$ votes each) for a mean of $>50$ ratings
-    per slice (or $>200$ ratings per subject).
-    \item We then trained a gradient boosting model (XGB) to predict expert scores
-    based on a combination of citizen science ratings and automated QSIPrep QC
-    metrics, attaining $R^2 = 0.80$ on a held-out test set from the ``gold standard.''
-    \item A separate model trained on only the QSIPrep QC metrics attained $R^2 = 0.68$,
-    demonstrating the added value of the citizen science raters.
-\end{itemize}
+\headerbox{Results}{name=results, column=1, span=2, row=0}{
 
 \begin{multicols}{3}
     \begin{Figure}
         \centering
         \includegraphics[width=0.33\linewidth]{figures/results_no_aug}
         \captionof{figure}{
-            {\bf HBN-POD2 quality control (QC) instruments}:
-            {\bf (A)} The user interface for citizen science QC. After a
-            tutorial, users are asked to give binary pass/fail ratings to
-            each subject's color scale fractional anisotropy image. The
-            intuitive swipe or click interface allows citizen scientists to
-            review more images than is practical for expert review. Expert
-            reviewers use the more advanced qsiprep-viewer interface, where
-            they can
-            {\bf (B)} view the distribution of QC metrics for the entire
-            study using interactive scatterplots and violin plots, and
-            {\bf (C)} inspect Individual subjects' preprocessing results,
-            including corrected dMRI images, frame displacement, q-space
-            sampling distributions, registration information, and a DTI
-            model.
+            {\bf XXX}:
+           XXX
         }
     \end{Figure}
     \columnbreak
@@ -227,20 +164,9 @@ In a linear tractometry model, $\textbf{y} = \beta X$ (\textbf{A}), to move towa
         \centering
         \includegraphics[width=0.33\linewidth]{figures/results_low_aug.pdf}
         \captionof{figure}{
-            {\bf HBN-POD2 quality control (QC) results}:
-            Six dMRI experts (with anonymized names) rated a subset of
-            200 subjects, with acceptable inter-rater reliability:
-            $\textbf{ICC3k} = 0.930 (95\% CI: [0.91, 0.94])$,
-            $\textbf{ICC3} = 0.688 (95\% CI: [0.64, 0.74])$,
-            $\langle \kappa \rangle = 0.648$.
-            We trained a gradient boosting model (XGB) on the average expert
-            rating, obtaining $R^2 = 0.80$ on a held-out test set.  Treating XGB
-            as a seventh expert rater, preserves inter-rater reliability:
-            $\textbf{ICC3k} = 0.945 (95\% CI: [0.93, 0.96])$,
-            $\textbf{ICC3} = 0.709 (95\% CI: [0.66, 0.75])$.
-            This entitles us to extend it's ratings to the entire HBN-POD2
-            dataset.
-        }
+            {\bf XXX}:
+            XXX
+            }
     \end{Figure}
 
     \columnbreak
@@ -248,45 +174,24 @@ In a linear tractometry model, $\textbf{y} = \beta X$ (\textbf{A}), to move towa
         \centering
         \includegraphics[width=0.33\linewidth]{figures/results_high_aug.pdf}
         \captionof{figure}{
-            {\bf HBN-POD2 quality control (QC) results}:
-            Six dMRI experts (with anonymized names) rated a subset of
-            200 subjects, with acceptable inter-rater reliability:
-            $\textbf{ICC3k} = 0.930 (95\% CI: [0.91, 0.94])$,
-            $\textbf{ICC3} = 0.688 (95\% CI: [0.64, 0.74])$,
-            $\langle \kappa \rangle = 0.648$.
-            We trained a gradient boosting model (XGB) on the average expert
-            rating, obtaining $R^2 = 0.80$ on a held-out test set.  Treating XGB
-            as a seventh expert rater, preserves inter-rater reliability:
-            $\textbf{ICC3k} = 0.945 (95\% CI: [0.93, 0.96])$,
-            $\textbf{ICC3} = 0.709 (95\% CI: [0.66, 0.75])$.
-            This entitles us to extend it's ratings to the entire HBN-POD2
-            dataset.
+            {\bf XXX}:
+            XXX
         }
     \end{Figure}
 
     \vspace{2em}
-    {\smaller %
-        \textsuperscript{\textasteriskcentered} \textbf{ICC3} and \textbf{ICC3k}
-        are appropriate when a fixed set of $k$ raters rate each subject (i.e. a
-        fully crossed design).  When all subjects are coded by multiple raters
-        and the average of their ratings is used for hypothesis testing,
-        \textbf{ICC3k} is appropriate.  When a subset of subjects is coded by
-        multiple raters and the reliability of their ratings is meant to
-        generalize to other subjects rated by only one coder, the single-measure
-        \textbf{ICC3} must be used.
-    }
 \end{multicols}
 
-\begin{itemize}[noitemsep, leftmargin=*]
-    \item Treating the new XGB model as an additional expert rater, we attain
-    $\textbf{ICC3k} = 0.945 (95\% CI: [0.93, 0.96])$ and
-    $\textbf{ICC3} = 0.709 (95\% CI: [0.66, 0.75])$.
-    \item The reliability of the XGB model entitles us to apply the XGB ratings
-    to the remaining HBN-POD2 scans, generating QC labels for the entire
-    dataset.
-    \item HBN-POD2 offers open QC metrics, eliminating the need for
-    investigators to repeat quality assessment for over 2,000 scans.
-\end{itemize}
+}
+
+%----------------------------------------------------------------------------
+%	CONCLUSION
+%----------------------------------------------------------------------------
+
+\headerbox{Conclusion and future work}{name=conclusion, column=2, below=methods}{
+
+XXX
+
 }
 
 %----------------------------------------------------------------------------
