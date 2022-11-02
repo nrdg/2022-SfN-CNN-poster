@@ -18,7 +18,7 @@
 %	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
 %----------------------------------------------------------------------------
 
-\documentclass[a0paper,landscape,fontscale=0.395]{baposter}
+\documentclass[a0paper,landscape,fontscale=0.365]{baposter}
 
 \usepackage[font=small,labelfont=bf]{caption} % Required for specifying captions to tables and figures
 \usepackage{booktabs} % Horizontal rules in tables
@@ -33,13 +33,13 @@
 \usepackage{graphbox}
 \usepackage{color}
 \usepackage{mathtools}
-\usepackage{hyperref}
+\usepackage[colorlinks=true]{hyperref}
 
 \graphicspath{{figures/}} % Directory in which figures are stored
 
-\definecolor{bordercol}{RGB}{256,256,256} % Border color of content boxes
-\definecolor{headercol1}{RGB}{51,0,111} % Background color for the header in the content boxes (left side)
-\definecolor{headercol2}{RGB}{51,0,111} % Background color for the header in the content boxes (middle)
+\definecolor{bordercol}{RGB}{145, 123, 76} % Border color of content boxes
+\definecolor{headercol1}{RGB}{51, 0, 111} % Background color for the header in the content boxes (left side)
+\definecolor{headercol2}{RGB}{51, 0, 111} % Background color for the header in the content boxes (middle)
 \definecolor{headerfontcol}{RGB}{256,256,256} % Text color for the header text in the content boxes
 \definecolor{boxcolor}{RGB}{256,256,256} % Background color for the content in the content boxes
 
@@ -63,7 +63,7 @@
     boxColorOne=boxcolor, % Background color for the content in the content boxes
     headershape=roundedright, % Specify the rounded corner in the content box headers
     headerfont=\Large\sf\bf, % Font modifiers for the text in the content box headers
-    textborder=rectangle,
+    textborder=rounded,
     background=none,
     headerborder=open, % Change to closed for a line under the content box headers
     boxshade=plain
@@ -88,7 +88,8 @@
 {%
 \includegraphics[align=c,height=3.00cm]{logos/UWlogo.png}%
 \includegraphics[align=c,height=3.20cm]{logos/stanford_logo.png}%
-} % University/lab logos
+}
+% University/lab logos
 \vspace{-10em}
 
 %----------------------------------------------------------------------------
@@ -105,6 +106,37 @@
     \item In previous work, we demonstrated that regularized regression provides accurate predictions of individual age in HBN from tractometry data (WM-based ``brain age'')\cite{richford2021sgl}.
 \end{itemize}
 
+\begin{multicols}{4}
+    \begin{Figure}
+        \centering
+        \includegraphics[width=1.0\linewidth]{figures/whole_brain_trk}
+        Whole brain tractography
+    \end{Figure}
+    \columnbreak
+    \begin{Figure}
+        \centering
+        \includegraphics[width=1.0\linewidth]{figures/arc_trk}
+        Selecting a bundle with ROIs
+    \end{Figure}
+
+    \columnbreak
+    \begin{Figure}
+        \centering
+        \includegraphics[width=1.0\linewidth]{figures/arc_profile_trk}
+        Extracting values along the length of the tract
+    \end{Figure}
+    \columnbreak
+    \begin{Figure}
+        \vspace{0.5cm}
+        \centering
+        \includegraphics[width=1.0\linewidth]{figures/tract_profile}
+        Tract profile
+    \end{Figure}
+
+    \vspace{2em}
+\end{multicols}
+
+
 \vspace{0.5em}
 \noindent\textbf{%
     \underline{Question}: %
@@ -116,32 +148,39 @@
 \begin{itemize}[nosep, leftmargin=*]
 \end{itemize}
 
+\begin{multicols}{3}
+    \textbf{A}
+    \begin{Figure}
+        \centering
+        \includegraphics[height=3.5cm]{figures/linear-model.pdf}
+    \end{Figure}
+    \columnbreak
+    \textbf{B}
+    \begin{Figure}
+        \centering
+        \includegraphics[height=3.5cm]{figures/linear-to-convnet.pdf}
+    \end{Figure}
+    \columnbreak
+    \textbf{C}
+    \begin{Figure}
+        \centering
+        \includegraphics[height=3.5cm]{figures/convnet-schematic.pdf}
+    \end{Figure}
+\end{multicols}
 
-\begin{minipage}[b]{1\linewidth}
-    \large
-    \begin{minipage}[b]{0.35\linewidth}
-    \textbf{A}\\
-    \includegraphics[height=4.5cm]{figures/linear-model.pdf}
-    \end{minipage}
-    \hspace{0.5cm}
-    \begin{minipage}[b]{0.35\linewidth}
-    \textbf{B}\\
-    \includegraphics[height=4.5cm]{figures/linear-to-convnet.pdf}
-    \end{minipage}
-    \begin{minipage}[b]{0.2\linewidth}
-    \textbf{C}\\
-    \includegraphics[height=4.5cm]{figures/convnet-schematic.pdf}
-    \end{minipage}
- \end{minipage}
+\begin{itemize}
+\item (\textbf{A}) In a linear tractometry model, $\textbf{y} = \beta X$. (\textbf{B}) To move towards a convolutional neural networks, we stack the data from different tracts and metrics (FA, MD, MK) as different measurement ``channels'' . (\textbf{C}) Training samples are then passed to a network (here as schematic)
 
-In a linear tractometry model, $\textbf{y} = \beta X$ (\textbf{A}), to move towards a convolutional neural networks, we stack the data from different tracts and metrics (FA, MD, MK) as different measurement ``channels'' (\textbf{B}). Training samples are then passed to a network (\textbf{C}).
-
-We used the 1817 subjects from HBN POD2 that had passing QC scores and age
+\item We used the 1817 subjects from HBN POD2 that had passing QC scores and age
 information.
 
-To evaluate the models, we set aside a test set of 20\% of the subjects (363 subjects)
+\item A variety of convolutional neural networks were implemented in \texttt{AFQ-Insight} (\url{https://richiehalford.org/AFQ-Insight})
 
-To compare model dependence on training set size, we set aside a test set (20\% or ) and then trained with variable train set sizes (100, 175, 350, 700, 1000, 1453 subjects)
+\item To evaluate the models, we set aside a test set of 20\% of the subjects (363 subjects)
+
+\item To compare model dependence on training set size, we trained with variable train set sizes (100, 175, 350, 700, 1000, 1453 subjects)
+
+\end{itemize}
 }
 
 %----------------------------------------------------------------------------
@@ -150,37 +189,75 @@ To compare model dependence on training set size, we set aside a test set (20\% 
 
 \headerbox{Results}{name=results, column=1, span=2, row=0}{
 
-\begin{multicols}{3}
+Model performance was quantified as the coefficient of determination, $R^2$
+
+$R^2$ was modeled as: $\alpha - (\alpha - \beta) e^{-\frac{x - x_{min}}{\kappa}}$, where $x$ is the number of training samples, $\alpha$ is $R^2$ at the maximal number of training samples, $\beta$ is $R^2$ at the smallest number of training samples ($x_min$) and $\kappa$ is a free parameter that denotes that number of training samples required to achieve $R^2$ that is 67\% of the difference between $\beta$ and $\alpha$.
+
+\begin{multicols}{4}
     \begin{Figure}
         \centering
-        \includegraphics[width=0.33\linewidth]{figures/results_no_aug}
-        \captionof{figure}{
-            {\bf XXX}:
-           XXX
-        }
+        \includegraphics[width=1.0\linewidth]{figures/curves_aug_0}
+    \end{Figure}
+    \columnbreak
+
+    \begin{Figure}
+        \centering
+        \includegraphics[width=1.0\linewidth]{figures/curves_aug_40}
+    \end{Figure}
+    \columnbreak
+
+    \begin{Figure}
+        \centering
+        \includegraphics[width=1.0\linewidth]{figures/curves_aug_20}
+    \end{Figure}
+    \columnbreak
+
+    \begin{Figure}
+        \includegraphics[height=3cm]{figures/legend}
+    \end{Figure}
+
+\end{multicols}
+\\
+\begin{multicols}{4}
+    \begin{Figure}
+        \centering
+        \includegraphics[width=1.0\linewidth]{figures/curves_aug_10}
+    \end{Figure}
+    \columnbreak
+
+    \begin{Figure}
+        \centering
+        \includegraphics[width=1.0\linewidth]{figures/curves_aug_5}
     \end{Figure}
     \columnbreak
     \begin{Figure}
         \centering
-        \includegraphics[width=0.33\linewidth]{figures/results_low_aug.pdf}
-        \captionof{figure}{
-            {\bf XXX}:
-            XXX
-            }
+        \includegraphics[width=1.0\linewidth]{figures/curves_pcrlasso}
+    \end{Figure}
+    \columnbreak
+
+\end{multicols}
+
+\begin{multicols}{3}
+    \begin{Figure}
+        \centering
+        \includegraphics[width=0.9\linewidth]{figures/max_acc}
+    \end{Figure}
+    \columnbreak
+    \begin{Figure}
+        \centering
+        \includegraphics[width=0.9\linewidth]{figures/min_acc}
     \end{Figure}
 
     \columnbreak
     \begin{Figure}
         \centering
-        \includegraphics[width=0.33\linewidth]{figures/results_high_aug.pdf}
-        \captionof{figure}{
-            {\bf XXX}:
-            XXX
-        }
+        \includegraphics[width=0.9\linewidth]{figures/num_subjects}
     \end{Figure}
 
     \vspace{2em}
 \end{multicols}
+
 
 }
 
@@ -188,17 +265,24 @@ To compare model dependence on training set size, we set aside a test set (20\% 
 %	CONCLUSION
 %----------------------------------------------------------------------------
 
-\headerbox{Conclusion and future work}{name=conclusion, column=2, below=methods}{
+\headerbox{Conclusion and future work}{name=conclusion, column=1, span=2, below=results}{
+\begin{multicols}{2}
+\begin{itemize}
+\item Neural network models (NNs) improve accuracy of tractometry analysis
+\item NNs are very data hungry
+\item Tuning and training these models is complicated and time-consuming
+\columnbreak
 
-XXX
-
+\item Differences can be much more important in some cases (see poster \# XXX)
+\end{itemize}
+\end{multicols}
 }
 
 %----------------------------------------------------------------------------
 %   REFERENCES
 %----------------------------------------------------------------------------
 
-\headerbox{References}{name=references,column=0,span=2,below=conclusion,above=bottom}{
+\headerbox{References}{name=references,column=0,span=2,below=methods,above=bottom}{
 
 \begin{multicols}{2}
 \smaller \smaller % Reduce the font size in this block
@@ -215,12 +299,12 @@ XXX
 %	ACKNOWLEDGMENTS
 %----------------------------------------------------------------------------
 
-\headerbox{Acknowledgments}{name=acknowledgments, column=2, below=conclusion,above=bottom}{
+\headerbox{Acknowledgments}{name=acknowledgments, column=2, below=methods,above=bottom}{
 
 \begin{multicols}{2}
 \smaller % Reduce the font size in this block
 \includegraphics[height=1.0cm]{logos/nimh-logo.png}
-
+\includegraphics[height=1.0cm]{logos/awslogo}
 \includegraphics[height=0.75cm]{logos/eSciencelogo.png}
 
 \end{multicols}
