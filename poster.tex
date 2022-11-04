@@ -53,7 +53,7 @@
 \begin{document}
 
 \begin{poster}{
-    columns=3,
+    columns=6,
     grid=false,
     headerheight=0.1\textheight,
     borderColor=bordercol, % Border color of content boxes
@@ -95,7 +95,7 @@
 %	INTRODUCTION
 %----------------------------------------------------------------------------
 
-\headerbox{Introduction}{name=introduction, column=0, row=0}{
+\headerbox{Introduction}{name=introduction, column=0, row=0, span=2}{
 
 \begin{itemize}[nosep, leftmargin=*]
     \item Tractometry uses diffusion MRI (dMRI) to quantify brain tissue properties within white matter connections \emph{in vivo} \cite{yeatman2012}.
@@ -103,6 +103,7 @@
     large (n>2,000) pediatric dMRI dataset that has been processed and automatically QC'd\cite{RichieHalfordCieslak2022HBNPOD2, alexander2017hbn}.
     \item The pyAFQ software was used to create tract profiles for statistical analysis \cite{Kruper2021evaluating}.
     \item In previous work, we demonstrated that regularized regression provides accurate predictions of individual age in HBN from tractometry data (WM-based ``brain age'')\cite{richford2021sgl}.
+    \item These models cannot capitalize on non-linear effects and sequence features, but deep learning models are well-suited to do that.
 \end{itemize}
 
 \begin{multicols}{4}
@@ -126,7 +127,7 @@
     \end{Figure}
     \columnbreak
     \begin{Figure}
-        \vspace{0.5cm}
+        \vspace{1.0cm}
         \centering
         \includegraphics[width=1.0\linewidth]{figures/tract_profile}
         Tract profile
@@ -139,11 +140,11 @@
 \vspace{0.5em}
 \noindent\textbf{%
     \underline{Question}: %
-    Would convolutional neural networks provide improvements in inferences from tractometry?%
+    Does deep learning provide improvements in inferences from tractometry?%
 }
 \vspace{0.5em}}
 
-\headerbox{Methods}{name=methods, column=0, below=introduction}{
+\headerbox{Methods}{name=methods, column=0, below=introduction, span=2}{
 \begin{itemize}[nosep, leftmargin=*]
 \end{itemize}
 
@@ -157,17 +158,18 @@
     \textbf{B}
     \begin{Figure}
         \centering
-        \includegraphics[height=3.5cm]{figures/linear-to-convnet.pdf}
+        \includegraphics[height=4.5cm]{figures/linear-to-convnet.pdf}
     \end{Figure}
     \columnbreak
     \textbf{C}
     \begin{Figure}
         \centering
-        \includegraphics[height=3.5cm]{figures/convnet-schematic.pdf}
+        \includegraphics[height=4.5cm]{figures/convnet-schematic.pdf}
     \end{Figure}
 \end{multicols}
 
-\begin{itemize}
+\begin{itemize}[nosep, leftmargin=*]
+
 \item (\textbf{A}) In a linear tractometry model, $\textbf{y} = \beta X$. (\textbf{B}) To move towards a convolutional neural networks, we stack the data from different tracts and metrics (FA, MD, MK) as different measurement ``channels'' . (\textbf{C}) Training samples are then passed to a network (here as schematic)
 
 \item We used the 1817 subjects from HBN POD2 that had passing QC scores and age
@@ -175,9 +177,15 @@ information.
 
 \item A variety of convolutional neural networks were implemented in \texttt{AFQ-Insight} (\url{https://richiehalford.org/AFQ-Insight})
 
-\item To evaluate the models, we set aside a test set of 20\% of the subjects (363 subjects)
+\item We trained the models in ``brain age'' prediction. To evaluate the models, we set aside a test set of 20\% of the subjects (363 subjects)
 
-\item To compare model dependence on training set size, we trained with variable train set sizes (100, 175, 350, 700, 1000, 1453 subjects)
+\item To compare model dependence on training set size, we trained with variable train set sizes (100, 175, 350, 700, 1000, 1453 subjects) and different augmentation levels
+
+\item We compared to a state-of-the-art linear model: PCR Lasso \cite{richford2021sgl}
+
+\item Model performance was quantified as the coefficient of determination, $R^2$, in predicting the age of the test set subjects.
+
+\item $R^2$ was modeled as: $\alpha - (\alpha - \beta) e^{-\frac{x - x_{min}}{\kappa}}$, where $x$ is the number of training samples, $\alpha$ is $R^2$ at the maximal number of training samples, $\beta$ is $R^2$ at the smallest number of training samples ($x_{min}$) and $\kappa$ is a free parameter that denotes that number of training samples required to achieve $R^2$ that is 67\% of the difference between $\beta$ and $\alpha$.
 
 \end{itemize}
 }
@@ -186,11 +194,9 @@ information.
 %	RESULTS 1
 %----------------------------------------------------------------------------
 
-\headerbox{Results}{name=results, column=1, span=2, row=0}{
+\headerbox{Results}{name=results, column=2, span=4, row=0}{
 
-Model performance was quantified as the coefficient of determination, $R^2$
-
-$R^2$ was modeled as: $\alpha - (\alpha - \beta) e^{-\frac{x - x_{min}}{\kappa}}$, where $x$ is the number of training samples, $\alpha$ is $R^2$ at the maximal number of training samples, $\beta$ is $R^2$ at the smallest number of training samples ($x_min$) and $\kappa$ is a free parameter that denotes that number of training samples required to achieve $R^2$ that is 67\% of the difference between $\beta$ and $\alpha$.
+At each augmentation level, performance improves with training set size:
 
 \begin{multicols}{4}
     \begin{Figure}
@@ -222,12 +228,19 @@ $R^2$ was modeled as: $\alpha - (\alpha - \beta) e^{-\frac{x - x_{min}}{\kappa}}
         \centering
         \includegraphics[width=1.0\linewidth]{figures/curves_aug_10}
     \end{Figure}
-    \columnbreak
 
+    \columnbreak
     \begin{Figure}
         \centering
         \includegraphics[width=1.0\linewidth]{figures/curves_aug_5}
     \end{Figure}
+
+    \columnbreak
+    \begin{Figure}
+        \centering
+        \includegraphics[width=1.0\linewidth]{figures/curves_aug_1}
+    \end{Figure}
+
     \columnbreak
     \begin{Figure}
         \centering
@@ -236,6 +249,8 @@ $R^2$ was modeled as: $\alpha - (\alpha - \beta) e^{-\frac{x - x_{min}}{\kappa}}
     \columnbreak
 
 \end{multicols}
+
+The models' performance at each augmentation level is summarized through three parameters that quantify the maximal and minimal performance levels, and the convergence of performance with training set size:
 
 \begin{multicols}{3}
     \begin{Figure}
@@ -264,7 +279,7 @@ $R^2$ was modeled as: $\alpha - (\alpha - \beta) e^{-\frac{x - x_{min}}{\kappa}}
 %	CONCLUSION
 %----------------------------------------------------------------------------
 
-\headerbox{Conclusion and future work}{name=conclusion, column=1, span=2, below=results}{
+\headerbox{Conclusion and future work}{name=conclusion, column=2, span=3, below=results}{
 \begin{multicols}{2}
 \begin{itemize}
 \item Neural network models (NNs) improve accuracy of tractometry analysis
@@ -281,7 +296,7 @@ $R^2$ was modeled as: $\alpha - (\alpha - \beta) e^{-\frac{x - x_{min}}{\kappa}}
 %   REFERENCES
 %----------------------------------------------------------------------------
 
-\headerbox{References}{name=references,column=0,span=2,below=methods,above=bottom}{
+\headerbox{References}{name=references, column=2, span=3, below=conclusion,above=bottom}{
 
 \begin{multicols}{2}
 \smaller \smaller % Reduce the font size in this block
@@ -298,16 +313,14 @@ $R^2$ was modeled as: $\alpha - (\alpha - \beta) e^{-\frac{x - x_{min}}{\kappa}}
 %	ACKNOWLEDGMENTS
 %----------------------------------------------------------------------------
 
-\headerbox{Acknowledgments}{name=acknowledgments, column=2, below=methods,above=bottom}{
+\headerbox{Acknowledgments}{name=acknowledgments, column=5, span=1, below=results,above=bottom}{
 
-\begin{multicols}{2}
 \smaller % Reduce the font size in this block
-\includegraphics[align=c, height=1.0cm]{logos/nimh-logo.png}
-\includegraphics[align=c, height=1.0cm]{logos/awslogo}
-\includegraphics[align=c, height=1.0cm]{logos/eSciencelogo.png}
+\includegraphics[align=c, height=1.0cm]{logos/nimh-logo.png}\\
+\includegraphics[align=c, height=1.0cm]{logos/awslogo}\\
+\includegraphics[align=c, height=1.0cm]{logos/eSciencelogo.png}\\
 \includegraphics[align=c, height=2.0cm]{qr}%
 
-\end{multicols}
 }
 
 \end{poster}
