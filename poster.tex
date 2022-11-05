@@ -103,43 +103,43 @@
 
 \begin{itemize}[nosep, leftmargin=*]
     \item Tractometry uses diffusion MRI (dMRI) to quantify brain tissue properties within white matter connections \emph{in vivo} \cite{yeatman2012}.
+
+    \begin{multicols}{4}
+        \begin{Figure}
+            \centering
+            \includegraphics[width=1.0\linewidth]{figures/whole_brain_trk}
+            Whole brain tractography
+        \end{Figure}
+        \columnbreak
+        \begin{Figure}
+            \centering
+            \includegraphics[width=1.0\linewidth]{figures/arc_trk}
+            Selecting a bundle with ROIs
+        \end{Figure}
+
+        \columnbreak
+        \begin{Figure}
+            \centering
+            \includegraphics[width=1.0\linewidth]{figures/arc_profile_trk}
+            Extracting values along the length of the tract
+        \end{Figure}
+        \columnbreak
+        \begin{Figure}
+            \vspace{1.0cm}
+            \centering
+            \includegraphics[width=1.0\linewidth]{figures/tract_profile}
+            Tract profile
+        \end{Figure}
+
+        \vspace{2em}
+    \end{multicols}
+
     \item The Healthy Brain Network Processed Open Derivatives (HBN POD2) is a
     large (n>2,000) pediatric dMRI dataset that has been processed and automatically QC'd\cite{RichieHalfordCieslak2022HBNPOD2, alexander2017hbn}.
     \item The pyAFQ software was used to create tract profiles for statistical analysis \cite{Kruper2021evaluating}.
     \item In previous work, we demonstrated that regularized regression provides accurate predictions of individual age in HBN from tractometry data (WM-based ``brain age'')\cite{richford2021sgl}.
     \item These models cannot capitalize on non-linear effects and sequence features, but deep learning models are well-suited to do that.
 \end{itemize}
-
-\begin{multicols}{4}
-    \begin{Figure}
-        \centering
-        \includegraphics[width=1.0\linewidth]{figures/whole_brain_trk}
-        Whole brain tractography
-    \end{Figure}
-    \columnbreak
-    \begin{Figure}
-        \centering
-        \includegraphics[width=1.0\linewidth]{figures/arc_trk}
-        Selecting a bundle with ROIs
-    \end{Figure}
-
-    \columnbreak
-    \begin{Figure}
-        \centering
-        \includegraphics[width=1.0\linewidth]{figures/arc_profile_trk}
-        Extracting values along the length of the tract
-    \end{Figure}
-    \columnbreak
-    \begin{Figure}
-        \vspace{1.0cm}
-        \centering
-        \includegraphics[width=1.0\linewidth]{figures/tract_profile}
-        Tract profile
-    \end{Figure}
-
-    \vspace{2em}
-\end{multicols}
-
 
 \vspace{0.5em}
 \noindent\textbf{%
