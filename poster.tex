@@ -34,6 +34,9 @@
 \usepackage{color}
 \usepackage{mathtools}
 \usepackage[colorlinks=true]{hyperref}
+\usepackage{framed}
+\usepackage{vwcol}
+
 
 \graphicspath{{figures/}} % Directory in which figures are stored
 
@@ -87,6 +90,7 @@
 {%
 \includegraphics[align=c,height=3.00cm]{logos/UWlogo.png}%
 \includegraphics[align=c,height=3.20cm]{logos/stanford_logo.png}%
+\includegraphics[align=c,height=3.20cm]{qr}%
 }
 % University/lab logos
 \vspace{-10em}
@@ -215,12 +219,24 @@ At each augmentation level, performance improves with training set size:
         \centering
         \includegraphics[width=1.0\linewidth]{figures/curves_aug_20}
     \end{Figure}
+
     \columnbreak
 
+    \begin{minipage}[c]{0.3\linewidth}
     \begin{Figure}
-        \includegraphics[height=3cm]{figures/legend}
+    \includegraphics[height=2.5cm]{figures/legend}
     \end{Figure}
-
+    \end{minipage}
+    \begin{minipage}[c]{0.6\linewidth}
+    \begin{framed}
+        \small
+        \textbf{Model categories} \\
+        \textbf{Convlutional neural networks}: lenet, vgg, resnet \\
+        \textbf{Fully connected neural network}: mlp4 \\
+        \textbf{Recurrent neural networks}: blstm2, lstmfcn \\
+        \textbf{Baseline linear model}: lassopcr
+    \end{framed}
+    \end{minipage}
 \end{multicols}
 \\
 \begin{multicols}{4}
@@ -250,7 +266,7 @@ At each augmentation level, performance improves with training set size:
 
 \end{multicols}
 
-The models' performance at each augmentation level is summarized through three parameters that quantify the maximal and minimal performance levels, and the convergence of performance with training set size:
+The models' performance at each augmentation level is summarized through three parameters that quantify the maximal ($\alpha$) and minimal ($\beta$) performance levels, and the convergence of performance with training set size ($\kappa$):
 
 \begin{multicols}{3}
     \begin{Figure}
@@ -272,7 +288,6 @@ The models' performance at each augmentation level is summarized through three p
     \vspace{2em}
 \end{multicols}
 
-
 }
 
 %----------------------------------------------------------------------------
@@ -287,9 +302,11 @@ The models' performance at each augmentation level is summarized through three p
 \item Tuning and training these models is complicated and time-consuming
 \columnbreak
 
-\item Differences can be much more important in some cases (see poster \# XXX)
+\item Differences can be much more important in some cases (see poster \# 387.05 on Monday afternoon)
 \end{itemize}
 \end{multicols}
+
+
 }
 
 %----------------------------------------------------------------------------
@@ -315,12 +332,16 @@ The models' performance at each augmentation level is summarized through three p
 
 \headerbox{Acknowledgments}{name=acknowledgments, column=5, span=1, below=results,above=bottom}{
 
-\smaller % Reduce the font size in this block
+Grant 1RF1MH121868\\
+\vspace{0.00001cm}\\
+
 \includegraphics[align=c, height=1.0cm]{logos/nimh-logo.png}\\
+\vspace{0.1cm}\\
 \includegraphics[align=c, height=1.0cm]{logos/awslogo}\\
+\vspace{0.1cm}\\
 \includegraphics[align=c, height=1.0cm]{logos/azure}\\
-\includegraphics[align=c, height=1.0cm]{logos/eSciencelogo.png}\\
-\includegraphics[align=c, height=2.0cm]{qr}%
+\vspace{0.1cm}\\
+\includegraphics[align=c, height=1.0cm]{logos/eSciencelogo.png}
 
 }
 
